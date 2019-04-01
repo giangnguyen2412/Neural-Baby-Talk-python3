@@ -11,21 +11,6 @@ This repository provides a Dockerfile for setting up all dependencies and prepro
 docker build -t nbt .
 ```
 
-Before running the container, you need to get COCO dataset downloaded and kept somewhere in your filesystem. Declare two environment variables:
-1. `$COCO_IMAGES`: path to a directory with sub-directories of images as `train2014`, `val2014`, `test2015`, etc...
-2. `$COCO_ANNOTATIONS`: path to a directory with annotation files like `instances_train2014.json`, `captions_train2014.json` etc...
-
-These directories will be attached as "volumes" to our docker container for Neural Baby Talk to use within. Run the docker image within a container in an interactive mode (bash session). Get [nvidia-docker](https://www.github.com/NVIDIA/nvidia-docker) and execute this command to run the fresh built docker image.
-
-```shell
-nvidia-docker run --name nbt_container -it \
-     -v $COCO_IMAGES:/workspace/neuralbabytalk/data/coco/images \
-     -v $COCO_ANNOTATIONS:/workspace/neuralbabytalk/data/coco/annotations \
-     --shm-size 8G -p 8888:8888 nbt /bin/bash
-```
-
-Ideally, shared memory size (`--shm-size`) of 8GB would be enough. Tune it according to your requirements / machine specifications.
-
 **Saved Checkpoints:** All checkpoints will be saved in `/workspace/neuralbabytalk/save`. From outside the container, execute this to get your checkpoints from this container into the main filesystem:
 The container would expose port 8888, which can be used to host tensorboard visualizations.
 
@@ -51,10 +36,42 @@ Data Preparation:
 
 Evaluation:
 
-- [coco-caption](https://github.com/jiasenlu/coco-caption): Download the modified version of coco-caption and put it under `tools/`
+- [coco-caption](https://github.com/luulinh90s/coco-caption): Download the modified version of coco-caption and put it under `tools/`
 
-
+Copy model-best.pth and infos_-best.pkl (from save/ dir)to NeuralBabyTalk/
 ## Demo
+```
+NeuralBabyTalk$ python demo.py --help --data_path data/
+usage: demo.py [-h] [--start_from START_FROM]
+               [--load_best_score LOAD_BEST_SCORE] [--id ID]
+               [--image_path IMAGE_PATH] [--cbs CBS]
+               [--cbs_tag_size CBS_TAG_SIZE] [--cbs_mode CBS_MODE]
+               [--det_oracle DET_ORACLE] [--cnn_backend CNN_BACKEND]
+               [--data_path DATA_PATH] [--beam_size BEAM_SIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --start_from START_FROM
+  --load_best_score LOAD_BEST_SCORE
+                        Do we load previous best score when resuming training.
+  --id ID               an id identifying this run/job. used in cross-val and
+                        appended when writing progress files
+  --image_path IMAGE_PATH
+                        path to the h5file containing the image data
+  --cbs CBS             whether use constraint beam search.
+  --cbs_tag_size CBS_TAG_SIZE
+                        whether use constraint beam search.
+  --cbs_mode CBS_MODE   which cbs mode to use in the decoding stage. cbs_mode:
+                        all|unique|novel
+  --det_oracle DET_ORACLE
+                        whether use oracle bounding box.
+  --cnn_backend CNN_BACKEND
+                        res101 or vgg16
+  --data_path DATA_PATH
+  --beam_size BEAM_SIZE
+
+NeuralBabyTalk$ python3 demo.py --image_path /home/resl/NeuralBabyTalk/data/coco/images --data_path data/ --cnn_backend res101
+````
 
 #### Without detection bbox
 
