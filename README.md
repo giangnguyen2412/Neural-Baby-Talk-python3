@@ -38,7 +38,7 @@ Evaluation:
 
 - [coco-caption](https://github.com/luulinh90s/coco-caption): Download the modified version of coco-caption and put it under `tools/`
 
-
+Copy model-best.pth and infos_-best.pkl (from save/ dir)to NeuralBabyTalk/
 ## Demo
 ```
 NeuralBabyTalk$ python demo.py --help --data_path data/
@@ -70,6 +70,7 @@ optional arguments:
   --data_path DATA_PATH
   --beam_size BEAM_SIZE
 
+NeuralBabyTalk$ python3 demo.py --image_path /home/resl/NeuralBabyTalk/data/coco/images --data_path data/ --cnn_backend res101
 ````
 
 #### Without detection bbox
