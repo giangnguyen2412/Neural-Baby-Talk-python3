@@ -40,6 +40,37 @@ Evaluation:
 
 
 ## Demo
+```
+NeuralBabyTalk$ python demo.py --help --data_path data/
+usage: demo.py [-h] [--start_from START_FROM]
+               [--load_best_score LOAD_BEST_SCORE] [--id ID]
+               [--image_path IMAGE_PATH] [--cbs CBS]
+               [--cbs_tag_size CBS_TAG_SIZE] [--cbs_mode CBS_MODE]
+               [--det_oracle DET_ORACLE] [--cnn_backend CNN_BACKEND]
+               [--data_path DATA_PATH] [--beam_size BEAM_SIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --start_from START_FROM
+  --load_best_score LOAD_BEST_SCORE
+                        Do we load previous best score when resuming training.
+  --id ID               an id identifying this run/job. used in cross-val and
+                        appended when writing progress files
+  --image_path IMAGE_PATH
+                        path to the h5file containing the image data
+  --cbs CBS             whether use constraint beam search.
+  --cbs_tag_size CBS_TAG_SIZE
+                        whether use constraint beam search.
+  --cbs_mode CBS_MODE   which cbs mode to use in the decoding stage. cbs_mode:
+                        all|unique|novel
+  --det_oracle DET_ORACLE
+                        whether use oracle bounding box.
+  --cnn_backend CNN_BACKEND
+                        res101 or vgg16
+  --data_path DATA_PATH
+  --beam_size BEAM_SIZE
+
+````
 
 #### Without detection bbox
 
