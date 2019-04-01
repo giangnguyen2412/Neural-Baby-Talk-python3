@@ -45,7 +45,7 @@ from nltk.tokenize import word_tokenize
 
 nlp = StanfordCoreNLP(
   os.path.join(os.path.dirname(os.path.realpath(__file__)),
-      'stanford-corenlp-full-2017-06-09'), memory='8g')
+      '/home/resl/stanford-corenlp-full-2017-06-09'), memory='8g')
 props={'annotators': 'ssplit, tokenize, lemma','pipelineLanguage':'en', 'outputFormat':'json'}
 
 def build_vocab(imgs, params):

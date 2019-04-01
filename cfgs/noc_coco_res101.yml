@@ -1,10 +1,10 @@
 # dataset setting
 dataset: coco
-input_json: '/srv/share/jiasenlu/nbtv2/data/coco/cap_coco.json'
-input_dic: '/srv/share/jiasenlu/nbtv2/data/coco_noc/dic_coco.json'
-image_path: '/srv/share/datasets/coco/images'
-proposal_h5: '/srv/share/jiasenlu/nbtv2/data/coco_noc/coco_noc_detection.h5'
-data_path: '/srv/share/jiasenlu/nbtv2/data'
+input_json: '/home/resl/NeuralBabyTalk/NeuralBabyTalk/data/coco/cap_coco.json'
+input_dic: '/home/resl/NeuralBabyTalk/NeuralBabyTalk/data/coco/dic_coco.json'
+image_path: '/home/resl/NeuralBabyTalk/data/coco/images'
+proposal_h5: '/home/resl/NeuralBabyTalk/NeuralBabyTalk/data/coco/coco_detection.h5'
+data_path: 'data'
 # language model
 cnn_backend: res101
 att_model: topdown

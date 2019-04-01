@@ -22,6 +22,7 @@ import yaml
 import torchvision.transforms as transforms
 import pdb
 
+
 try:
     import tensorflow as tf
 except ImportError:
@@ -118,6 +119,7 @@ def train(epoch, opt):
             # ss_prob_history[iteration] = model.ss_prob
 
 def eval(opt):
+    print(opt)
     model.eval()
     #########################################################################################
     # eval begins here
@@ -281,7 +283,8 @@ if __name__ == '__main__':
 
             # open old infos and check if models are compatible
         with open(info_path, 'rb') as f:
-            infos = pickle.load(f)
+            print(info_path)
+            infos = pickle.load(f, encoding='latin1')
             saved_model_opt = infos['opt']
 
         # opt.learning_rate = saved_model_opt.learning_rate
@@ -289,8 +292,8 @@ if __name__ == '__main__':
         model.load_state_dict(torch.load(model_path))
 
         if os.path.isfile(os.path.join(opt.start_from, 'histories_'+opt.id+'.pkl')):
-            with open(os.path.join(opt.start_from, 'histories_'+opt.id+'.pkl')) as f:
-                histories = pickle.load(f)
+            with open(os.path.join(opt.start_from, 'histories_'+opt.id+'.pkl'), 'rb') as f:
+                histories = pickle.load(f, encoding='latin1')
 
     if opt.decode_noc:
         model._reinit_word_weight(opt, dataset.ctoi, dataset.wtoi)

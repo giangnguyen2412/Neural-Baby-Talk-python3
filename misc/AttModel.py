@@ -243,8 +243,9 @@ class CascadeCore(nn.Module):
         self.fg_emb.requires_grad=False
 
         # setting the fg mask for the cascadeCore.
-        self.fg_mask = Parameter(opt.fg_mask)
-        self.fg_mask.requires_grad=False
+        #self.fg_mask = Parameter(opt.fg_mask)
+        #self.fg_mask.requires_grad=False
+        self.fg_mask = Parameter(opt.fg_mask, requires_grad=False)
         self.min_value = -1e8
         self.beta = opt.beta
 
