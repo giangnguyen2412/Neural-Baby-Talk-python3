@@ -36,7 +36,7 @@ Data Preparation:
 
 Evaluation:
 
-- [coco-caption](https://github.com/jiasenlu/coco-caption): Download the modified version of coco-caption and put it under `tools/`
+- [coco-caption](https://github.com/luulinh90s/coco-caption): Download the modified version of coco-caption and put it under `tools/`
 
 
 ## Demo
