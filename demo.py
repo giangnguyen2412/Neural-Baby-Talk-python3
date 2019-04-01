@@ -176,8 +176,9 @@ if __name__ == '__main__':
             info_path = os.path.join(args.start_from, 'infos_'+args.id+'.pkl')
 
             # open old infos and check if models are compatible
-        with open(info_path) as f:
-            infos = cPickle.load(f)
+        print(info_path)
+        with open(info_path, 'rb') as f:
+            infos = cPickle.load(f, encoding='latin1')
             opt = infos['opt']
             opt.image_path = args.image_path
             opt.cbs = args.cbs
@@ -248,7 +249,7 @@ if __name__ == '__main__':
     opt.ltow = dataset_val.ltow
     opt.itoc = dataset_val.itoc
 
-    pdb.set_trace()
+    #pdb.set_trace()
     if opt.att_model == 'topdown':
         model = AttModel.TopDownModel(opt)
     elif opt.att_model == 'att2in2':
@@ -262,8 +263,8 @@ if __name__ == '__main__':
         print('Loading the model %s...' %(model_path))
         model.load_state_dict(torch.load(model_path))
         if os.path.isfile(os.path.join(args.start_from, 'histories_'+opt.id+'.pkl')):
-            with open(os.path.join(args.start_from, 'histories_'+opt.id+'.pkl')) as f:
-                histories = cPickle.load(f)
+            with open(os.path.join(args.start_from, 'histories_'+opt.id+'.pkl'), 'rb') as f:
+                histories = cPickle.load(f, encoding='latin1')
 
     if opt.cuda:
         model.cuda()
@@ -271,5 +272,5 @@ if __name__ == '__main__':
     predictions = demo(opt)
 
     print('saving...')
-    json.dump(predictions, open('visu.json', 'w'))
+    #json.dump(predictions, open('visu.json', 'w'))
 
