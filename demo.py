@@ -26,9 +26,34 @@ import pdb
 import argparse
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from PIL import Image
 plt.switch_backend('agg')
 import json
+
+def visualize(image_path, words, smooth=True):
+    """
+    Visualizes caption with weights at every word.
+    Adapted from paper authors' repo: https://github.com/kelvinxu/arctic-captions/blob/master/alpha_visualization.ipynb
+    :param image_path: path to image that has been captioned
+    :param words: caption
+    :param smooth: smooth weights?
+    """
+    plt.switch_backend("TKAgg")
+    image = Image.open(image_path)
+    image = image.resize([14 * 24, 14 * 24], Image.LANCZOS)
+
+
+    if len(words) > 50:
+        return
+
+    plt.text(0, 1, '%s' % (words), color='black', backgroundcolor='white', fontsize=12)
+    plt.imshow(image)
+
+    plt.set_cmap(cm.Greys_r)
+    plt.axis('image')
+    plt.show()
+
 def demo(opt):
     model.eval()
     #########################################################################################
@@ -44,7 +69,6 @@ def demo(opt):
     for step in range(1000):
         data = data_iter_val.next()
         img, iseq, gts_seq, num, proposals, bboxs, box_mask, img_id = data
-
         # if img_id[0] != 134688:
         #     continue
 
@@ -129,13 +153,29 @@ def demo(opt):
         # plt.axis('off')
         # plt.axis('tight')
         # plt.tight_layout()
-        fig.savefig('visu/%d.jpg' %(img_id[0]), bbox_inches='tight', pad_inches=0, dpi=150)
-        print(str(img_id[0]) + ': ' + sents[0])
+        #fig.savefig('visu/%d.jpg' %(img_id[0]), bbox_inches='tight', pad_inches=0, dpi=150)
+        #print(str(img_id[0]) + ': ' + sents[0])
+
+        '''
+        input_im2show = Image.open(os.path.join(opt.image_path, 'val2014/COCO_val2014_%012d.jpg' % img_id[0]))
+        input_im2show = input_im2show.resize([14 * 24, 14 * 24], Image.LANCZOS)
+        plt.imshow(input_im2show)
+        plt.set_cmap(cm.Greys_r)
+        plt.axis('off')
+        #plt.show()
+        plt.savefig('aa.png', bbox_inches='tight')
+
+        print(sents[0])
+        '''
+        img_path  = os.path.join(opt.image_path, 'val2014/COCO_val2014_%012d.jpg' % img_id[0])
+        words = sents[0]
+        visualize(img_path, words)
 
         entry = {'image_id': img_id[0], 'caption': sents[0]}
         predictions.append(entry)
 
     return predictions
+
 ####################################################################################
 # Main
 ####################################################################################

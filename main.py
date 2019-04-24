@@ -265,7 +265,7 @@ if __name__ == '__main__':
 
     if not opt.finetune_cnn: opt.fixed_block = 4 # if not finetune, fix all cnn block
 
-    if opt.att_model == 'topdown':
+    if opt.att_model == 'topdown':  # default is topdown attentin
         model = AttModel.TopDownModel(opt)
     elif opt.att_model == 'att2in2':
         model = AttModel.Att2in2Model(opt)
