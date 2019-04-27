@@ -1,25 +1,10 @@
 # Neural Baby Talk
 
-![teaser results](demo/img1.png)
 
+## Setup
+To setup requirements, I highly recommend to use virtual environment with conda. [Here](https://drive.google.com/file/d/1GSpSCynryewWi8VXVx_0tPoYP_-YskZo/view?usp=sharing) is the yml file, using this command to complete your package setup.
 
-## Docker Setup
-
-This repository provides a Dockerfile for setting up all dependencies and preprocessed data for COCO experiments (normal / robust / NOC). Docker support for Flickr30k experiments is not yet supported. To build the Dockerfile, just execute this from project root:
-
-```shell
-docker build -t nbt .
-```
-
-**Saved Checkpoints:** All checkpoints will be saved in `/workspace/neuralbabytalk/save`. From outside the container, execute this to get your checkpoints from this container into the main filesystem:
-The container would expose port 8888, which can be used to host tensorboard visualizations.
-
-```shell
-docker container cp nbt_container:workspace/neuralbabytalk/save /path/to/local/filesystem/save
-```
-
-Skip directly to **Training and Evaluation** section to execute specified commands within the container.
-
+`conda env create -f environment.yml`
 
 ## requirement
 
