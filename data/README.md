@@ -1,4 +1,5 @@
 ## Data Preparation for Neural Baby Talk
+
 ### Image Dataset
 
 - COCO: Download coco images from [link](http://cocodataset.org/#download), we need `2014 training` images and `2014 val` images. You should put the image in some directory, denoted as `$IMAGE_ROOT`.
@@ -13,6 +14,7 @@
 - Download COCO 2014 Train/Val annotations from [link](http://images.cocodataset.org/annotations/annotations_trainval2014.zip). Extract the zip file and put the json file under `coco/annotations/`
 - Download stanford core nlp tools and modified the `scripts/prepro_dic_coco.py` with correct stanford core nlp location. (In my experiment, I use the the version of `stanford-corenlp-full-2017-06-09` [link](https://nlp.stanford.edu/software/stanford-corenlp-full-2017-06-09.zip))
 - You can either download the preprocessed data from [here](https://www.dropbox.com/s/1t9nrbevzqn93to/coco.tar.gz?dl=0) or you can use the pre-process script to generate the data. Under the `root` directory, run the following command to pre-process the data.
+- To know what is COCO anotations, take a look here: http://cocodataset.org/#format-data or http://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch/#coco-dataset-format
 ```
 python prepro/prepro_dic_coco.py --input_json data/coco/dataset_coco.json --split normal --output_dic_json data/coco/dic_coco.json --output_cap_json data/coco/cap_coco.json
 ```
