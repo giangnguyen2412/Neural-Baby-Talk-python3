@@ -39,7 +39,7 @@ def train(epoch, opt):
     #########################################################################################
     # Training begins here
     #########################################################################################
-    data_iter = iter(dataloader)
+    data_iter = iter(dataloader)    # intput_seqs duoc lay ra tu dataloader
     lm_loss_temp = 0
     bn_loss_temp = 0
     fg_loss_temp = 0

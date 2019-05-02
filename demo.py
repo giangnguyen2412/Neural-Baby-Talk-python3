@@ -44,8 +44,8 @@ def visualize(image_path, words, smooth=True):
     image = image.resize([14 * 24, 14 * 24], Image.LANCZOS)
 
 
-    if len(words) > 50:
-        return
+    #if len(words) > 50:
+        #return
 
     plt.text(0, 1, '%s' % (words), color='black', backgroundcolor='white', fontsize=12)
     plt.imshow(image)
@@ -66,7 +66,7 @@ def demo(opt):
     num_show = 0
     predictions = []
     count = 0
-    for step in range(1000):
+    for step in range(2):
         data = data_iter_val.next()
         img, iseq, gts_seq, num, proposals, bboxs, box_mask, img_id = data
         # if img_id[0] != 134688:
@@ -84,17 +84,20 @@ def demo(opt):
         input_seqs.data.resize_(iseq.size()).copy_(iseq)
         gt_seqs.data.resize_(gts_seq.size()).copy_(gts_seq)
         input_num.data.resize_(num.size()).copy_(num)
-        input_ppls.data.resize_(proposals.size()).copy_(proposals)
+        input_ppls.data.resize_(proposals.size()).copy_(proposals) # ppls la proposals
         gt_bboxs.data.resize_(bboxs.size()).copy_(bboxs)
         mask_bboxs.data.resize_(box_mask.size()).copy_(box_mask)
         input_imgs.data.resize_(img.size()).copy_(img)
 
+        img_path = os.path.join(opt.image_path, 'val2014/COCO_val2014_%012d.jpg' % img_id[0])
+        visualize(img_path, '')
+
         eval_opt = {'sample_max':1, 'beam_size': opt.beam_size, 'inference_mode' : True, 'tag_size' : opt.cbs_tag_size}
-        seq, bn_seq, fg_seq, _, _, _ = model._sample(input_imgs, input_ppls, input_num, eval_opt)
+        seq, bn_seq, fg_seq, _, _, _ = model._sample(input_imgs, input_ppls, input_num, eval_opt)   # bn_seq and fg_seq and seq come from model._sample,
 
         sents, det_idx, det_word = utils.decode_sequence_det(dataset_val.itow, dataset_val.itod, dataset_val.ltow, dataset_val.itoc, dataset_val.wtod, \
                                                             seq, bn_seq, fg_seq, opt.vocab_size, opt)
-
+        pdb.set_trace()
         if opt.dataset == 'flickr30k':
             im2show = Image.open(os.path.join(opt.image_path, '%d.jpg' % img_id[0])).convert('RGB')
         else:
@@ -113,15 +116,19 @@ def demo(opt):
 
 
         if len(det_idx) > 0:
-            # for visulization
+            # for visualization
             proposals = proposals[0].numpy()
             proposals[:,0] = proposals[:,0] * w / float(opt.image_crop_size)
             proposals[:,2] = proposals[:,2] * w / float(opt.image_crop_size)
             proposals[:,1] = proposals[:,1] * h / float(opt.image_crop_size)
-            proposals[:,3] = proposals[:,3] * h / float(opt.image_crop_size)            
+            proposals[:,3] = proposals[:,3] * h / float(opt.image_crop_size)
 
             cls_dets = proposals[det_idx]
             rest_dets = proposals[rest_idx]
+
+        img_path = os.path.join(opt.image_path, 'val2014/COCO_val2014_%012d.jpg' % img_id[0])
+        print(str(img_id[0]) + ': ' + sents[0] + img_path)
+        visualize(img_path, sents[0])
 
         # fig = plt.figure()
         # fig = plt.figure(frameon=False)
@@ -153,25 +160,16 @@ def demo(opt):
         # plt.axis('off')
         # plt.axis('tight')
         # plt.tight_layout()
-        #fig.savefig('visu/%d.jpg' %(img_id[0]), bbox_inches='tight', pad_inches=0, dpi=150)
-        #print(str(img_id[0]) + ': ' + sents[0])
+        fig.savefig('visu/%d.jpg' %(img_id[0]), bbox_inches='tight', pad_inches=0, dpi=150)
 
-        '''
-        input_im2show = Image.open(os.path.join(opt.image_path, 'val2014/COCO_val2014_%012d.jpg' % img_id[0]))
-        input_im2show = input_im2show.resize([14 * 24, 14 * 24], Image.LANCZOS)
-        plt.imshow(input_im2show)
-        plt.set_cmap(cm.Greys_r)
-        plt.axis('off')
-        #plt.show()
-        plt.savefig('aa.png', bbox_inches='tight')
+        #img_path  = os.path.join(opt.image_path, 'val2014/COCO_val2014_%012d.jpg' % img_id[0])
+        #words = sents[0]
 
-        print(sents[0])
-        '''
-        img_path  = os.path.join(opt.image_path, 'val2014/COCO_val2014_%012d.jpg' % img_id[0])
-        words = sents[0]
-        visualize(img_path, words)
+        #print(str(img_id[0]) + ': ' + sents[0] + img_path)
 
-        entry = {'image_id': img_id[0], 'caption': sents[0]}
+        #visualize(img_path, words)
+
+        entry = {'image_id': img_id[0].item(), 'caption': sents[0]}
         predictions.append(entry)
 
     return predictions
@@ -208,6 +206,8 @@ if __name__ == '__main__':
     infos = {}
     histories = {}
     if args.start_from is not None:
+        print(args.start_from)
+        pdb.set_trace()
         if args.load_best_score == 1:
             model_path = os.path.join(args.start_from, 'model-best.pth')
             info_path = os.path.join(args.start_from, 'infos_'+args.id+'-best.pkl')
@@ -220,6 +220,7 @@ if __name__ == '__main__':
         with open(info_path, 'rb') as f:
             infos = cPickle.load(f, encoding='latin1')
             opt = infos['opt']
+            pdb.set_trace()
             opt.image_path = args.image_path
             opt.cbs = args.cbs
             opt.cbs_tag_size = args.cbs_tag_size
@@ -312,5 +313,5 @@ if __name__ == '__main__':
     predictions = demo(opt)
 
     print('saving...')
-    #json.dump(predictions, open('visu.json', 'w'))
+    json.dump(predictions, open('visu.json', 'w'))
 
